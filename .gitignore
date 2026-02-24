@@ -1,0 +1,25 @@
+# Node
+node_modules/
+
+# Build
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Coverage
+coverage/
+
+# Lock files (optionally keep package-lock.json if you want reproducible installs)
+# package-lock.json
