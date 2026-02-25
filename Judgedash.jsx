@@ -1,46 +1,191 @@
 import { useState } from "react";
-import { useAuth } from "./useAuth";
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 
-
-const judgeProfiles = {
-  krishnan: { id: 101, name: "Hon. Justice R. Krishnan", court: "District Court, Mumbai" },
-  mehta:    { id: 102, name: "Hon. Justice S. Mehta",    court: "High Court, Delhi" },
-  nair:     { id: 103, name: "Hon. Justice A. Nair",     court: "Sessions Court, Kochi" },
-  sharma:   { id: 104, name: "Hon. Chief Justice P. Sharma", court: "Supreme Court, New Delhi" },
-};
-
 const judgeCases = [
-  { id: "CRT-2026-001", court: "District Court, Mumbai",      presidingJudgeId: 101, title: "State vs. Aryan Mehta",   status: "Trial",   nextHearing: "2026-03-15" },
-  { id: "CRT-2026-002", court: "High Court, Delhi",           presidingJudgeId: 102, title: "People vs. Nisha Verma", status: "Hearing", nextHearing: "2026-04-02" },
-  { id: "CRT-2026-003", court: "Sessions Court, Kochi",       presidingJudgeId: 103, title: "State vs. Rajan Pillai", status: "Closed",  nextHearing: "—" },
-  { id: "CRT-2026-004", court: "Supreme Court, New Delhi",    presidingJudgeId: 104, title: "Republic vs. Devika Rao",status: "Hearing", nextHearing: "2026-03-28" },
-  // Extra cases to demonstrate court-based filtering
-  { id: "CRT-2026-005", court: "District Court, Mumbai",      presidingJudgeId: 101, title: "State vs. Priya Nair",   status: "Hearing", nextHearing: "2026-04-10" },
-  { id: "CRT-2026-006", court: "High Court, Delhi",           presidingJudgeId: 999, title: "People vs. Arjun Das",  status: "Trial",   nextHearing: "2026-04-15" },
+  {
+    id: "CRT-2026-001",
+    title: "State vs. Aryan Mehta",
+    courtName: "District Court, Mumbai",
+    presidingJudge: "Hon. Justice R. Krishnan",
+    status: "Trial",
+    nextHearing: "2026-03-15",
+  },
+  {
+    id: "CRT-2026-002",
+    title: "People vs. Nisha Verma",
+    courtName: "High Court, Delhi",
+    presidingJudge: "Hon. Justice S. Mehta",
+    status: "Hearing",
+    nextHearing: "2026-04-02",
+  },
+  {
+    id: "CRT-2026-003",
+    title: "State vs. Rajan Pillai",
+    courtName: "Sessions Court, Kochi",
+    presidingJudge: "Hon. Justice A. Nair",
+    status: "Closed",
+    nextHearing: "—",
+  },
+  {
+    id: "CRT-2026-004",
+    title: "Republic vs. Devika Rao",
+    courtName: "Supreme Court, New Delhi",
+    presidingJudge: "Hon. Chief Justice P. Sharma",
+    status: "Hearing",
+    nextHearing: "2026-03-28",
+  },
 ];
 
 const evidenceByCase = {
   "CRT-2026-001": [
-    { id: 1, title: "CCTV Footage – Lobby", description: "Captured at 10:45 PM on Jan 12, 2026.", format: "video", party: "victim", uploadedBy: "Officer Sharma", uploadDate: "2026-01-14", fileUrl: null },
-    { id: 2, title: "Crime Scene Photograph", description: "Taken at 11:30 PM by forensics team.", format: "photo", party: "victim", uploadedBy: "Forensics Team", uploadDate: "2026-01-13", fileUrl: "https://picsum.photos/800/500?random=11" },
-    { id: 3, title: "Forensic Lab Report", description: "DNA match confirmation from forensic laboratory.", format: "text", party: "victim", uploadedBy: "Forensic Dept.", uploadDate: "2026-01-16", fileUrl: null, textContent: "Forensic Analysis Report — Case CRT-2026-001\n\nSample ID: FSL-9921\nAnalysis Type: DNA Profiling\nResult: Positive match with accused sample (99.97% confidence)\nChain of Custody: Verified and sealed\nAnalyst: Dr. P. Kapoor" },
-    { id: 4, title: "Victim Impact Statement", description: "Recorded audio testimony from victim's family.", format: "voice", party: "victim", uploadedBy: "Victim Counsel", uploadDate: "2026-01-19", fileUrl: null },
-    { id: 5, title: "Accused Alibi Recording", description: "Audio submission from defense counsel as alibi claim.", format: "voice", party: "accused", uploadedBy: "Defense Team", uploadDate: "2026-01-18", fileUrl: null },
-    { id: 6, title: "Character Reference Letter", description: "Written character testimony from accused's employer.", format: "text", party: "accused", uploadedBy: "Advocate Rao", uploadDate: "2026-01-20", fileUrl: null, textContent: "To The Honourable Court,\n\nThis is to certify that Mr. Aryan Mehta has served our organisation with distinction for 5 years. He is of exemplary character and moral standing.\n\nSigned,\nMr. K. Bose\nDirector, Apex Industries" },
-    { id: 7, title: "Accused — Event Photograph", description: "Photographic evidence placing accused at a public event.", format: "photo", party: "accused", uploadedBy: "Defense Team", uploadDate: "2026-01-21", fileUrl: "https://picsum.photos/800/500?random=21" },
+    {
+      id: 1,
+      title: "CCTV Footage – Lobby",
+      description: "Captured at 10:45 PM on Jan 12, 2026. Shows accused entering building.",
+      format: "video",
+      party: "victim",
+      uploadedBy: "Officer Sharma",
+      uploadDate: "2026-01-14",
+      fileUrl: null,
+    },
+    {
+      id: 2,
+      title: "Crime Scene Photograph",
+      description: "Taken at 11:30 PM by forensics. Shows primary location of incident.",
+      format: "photo",
+      party: "victim",
+      uploadedBy: "Forensics Team",
+      uploadDate: "2026-01-13",
+      fileUrl: "https://picsum.photos/800/500?random=11",
+    },
+    {
+      id: 3,
+      title: "Forensic Lab Report",
+      description: "DNA match confirmation from forensic laboratory analysis.",
+      format: "text",
+      party: "victim",
+      uploadedBy: "Forensic Dept.",
+      uploadDate: "2026-01-16",
+      fileUrl: null,
+      textContent:
+        "Forensic Analysis Report — Case CRT-2026-001\n\nSample ID: FSL-9921\nAnalysis Type: DNA Profiling\nResult: Positive match with accused sample (99.97% confidence)\nChain of Custody: Verified and sealed\nAnalyst: Dr. P. Kapoor, Senior Forensic Scientist\nDate of Analysis: January 16, 2026",
+    },
+    {
+      id: 4,
+      title: "Victim Impact Statement",
+      description: "Recorded audio testimony from the victim's family.",
+      format: "voice",
+      party: "victim",
+      uploadedBy: "Victim Counsel",
+      uploadDate: "2026-01-19",
+      fileUrl: null,
+    },
+    {
+      id: 5,
+      title: "Accused Alibi Recording",
+      description: "Audio submission from defense counsel as alibi claim.",
+      format: "voice",
+      party: "accused",
+      uploadedBy: "Defense Team",
+      uploadDate: "2026-01-18",
+      fileUrl: null,
+    },
+    {
+      id: 6,
+      title: "Character Reference Letter",
+      description: "Written character testimony from accused's employer.",
+      format: "text",
+      party: "accused",
+      uploadedBy: "Advocate Rao",
+      uploadDate: "2026-01-20",
+      fileUrl: null,
+      textContent:
+        "To The Honourable Court,\n\nThis is to certify that Mr. Aryan Mehta has served our organisation with distinction for 5 years. He is of exemplary character and moral standing. We humbly request the court to consider this in its deliberations.\n\nSigned,\nMr. K. Bose\nDirector, Apex Industries",
+    },
+    {
+      id: 7,
+      title: "Accused — Event Photograph",
+      description: "Photographic evidence placing accused at a public event on the same date.",
+      format: "photo",
+      party: "accused",
+      uploadedBy: "Defense Team",
+      uploadDate: "2026-01-21",
+      fileUrl: "https://picsum.photos/800/500?random=21",
+    },
   ],
   "CRT-2026-002": [
-    { id: 8, title: "Bank Transaction Records", description: "Documented fraudulent transactions over 6 months.", format: "text", party: "victim", uploadedBy: "Bank Investigator", uploadDate: "2026-02-01", fileUrl: null, textContent: "Transaction Log — Case CRT-2026-002\n\nJan 5  — ₹2,45,000 transferred to unknown account\nJan 12 — ₹1,80,000 suspicious withdrawal\nFeb 3  — ₹3,10,000 wire transfer flagged\n\nTotal suspected fraud: ₹7,35,000" },
-    { id: 9, title: "Surveillance Photo — ATM", description: "ATM camera photo of accused during withdrawal.", format: "photo", party: "victim", uploadedBy: "Cyber Cell", uploadDate: "2026-02-04", fileUrl: "https://picsum.photos/800/500?random=31" },
-    { id: 10, title: "Call Recording — Evidence A", description: "Phone call recording of accused discussing fraud.", format: "voice", party: "victim", uploadedBy: "Cyber Cell", uploadDate: "2026-02-05", fileUrl: null },
-    { id: 11, title: "Defense Statement", description: "Written statement by accused denying involvement.", format: "text", party: "accused", uploadedBy: "Defense Counsel", uploadDate: "2026-02-08", fileUrl: null, textContent: "I, Nisha Verma, hereby state under oath that I had no knowledge of any fraudulent transactions. The account was compromised without my consent." },
+    {
+      id: 8,
+      title: "Bank Transaction Records",
+      description: "Documented fraudulent transactions over a 6-month period.",
+      format: "text",
+      party: "victim",
+      uploadedBy: "Bank Investigator",
+      uploadDate: "2026-02-01",
+      fileUrl: null,
+      textContent:
+        "Transaction Log — Case CRT-2026-002\n\nJan 5  — ₹2,45,000 transferred to unknown account\nJan 12 — ₹1,80,000 suspicious withdrawal\nFeb 3  — ₹3,10,000 wire transfer flagged by system\n\nTotal suspected fraud: ₹7,35,000\nInvestigating Officer: Cyber Cell Unit 4",
+    },
+    {
+      id: 9,
+      title: "Surveillance Photo — ATM",
+      description: "ATM camera photograph of accused during fraudulent withdrawal.",
+      format: "photo",
+      party: "victim",
+      uploadedBy: "Cyber Cell",
+      uploadDate: "2026-02-04",
+      fileUrl: "https://picsum.photos/800/500?random=31",
+    },
+    {
+      id: 10,
+      title: "Call Recording — Evidence A",
+      description: "Phone call recording of accused discussing the fraud scheme.",
+      format: "voice",
+      party: "victim",
+      uploadedBy: "Cyber Cell",
+      uploadDate: "2026-02-05",
+      fileUrl: null,
+    },
+    {
+      id: 11,
+      title: "Defense Statement",
+      description: "Written statement submitted by accused denying involvement.",
+      format: "text",
+      party: "accused",
+      uploadedBy: "Defense Counsel",
+      uploadDate: "2026-02-08",
+      fileUrl: null,
+      textContent:
+        "I, Nisha Verma, hereby state under oath that I had no knowledge of or involvement in any fraudulent transactions. The account referenced was compromised without my consent. I request a full forensic audit of my devices to establish innocence.",
+    },
   ],
   "CRT-2026-003": [],
   "CRT-2026-004": [
-    { id: 12, title: "Constitutional Brief", description: "Legal brief outlining constitutional violations.", format: "text", party: "victim", uploadedBy: "Sr. Advocate Pillai", uploadDate: "2026-03-01", fileUrl: null, textContent: "Constitutional Petition Brief\nCase: Republic vs. Devika Rao\n\nThe petitioner submits violations of Articles 14, 19, and 21 of the Constitution of India." },
-    { id: 13, title: "Counter Affidavit", description: "Respondent's counter affidavit challenging claims.", format: "text", party: "accused", uploadedBy: "Respondent Counsel", uploadDate: "2026-03-05", fileUrl: null, textContent: "Counter Affidavit — Devika Rao\n\nThe respondent categorically denies all allegations. Actions taken were within statutory authority under Section 12 of the relevant Act." },
+    {
+      id: 12,
+      title: "Constitutional Brief",
+      description: "Legal brief filed by petitioner outlining constitutional violations.",
+      format: "text",
+      party: "victim",
+      uploadedBy: "Sr. Advocate Pillai",
+      uploadDate: "2026-03-01",
+      fileUrl: null,
+      textContent:
+        "Constitutional Petition Brief\nCase: Republic vs. Devika Rao\n\nThe petitioner submits that the actions of the respondent constitute a direct violation of Articles 14, 19, and 21 of the Constitution of India. Supporting precedents: Maneka Gandhi v. Union of India (1978), K.S. Puttaswamy v. Union of India (2017).",
+    },
+    {
+      id: 13,
+      title: "Counter Affidavit",
+      description: "Respondent's counter affidavit challenging petitioner claims.",
+      format: "text",
+      party: "accused",
+      uploadedBy: "Respondent Counsel",
+      uploadDate: "2026-03-05",
+      fileUrl: null,
+      textContent:
+        "Counter Affidavit — Devika Rao\n\nThe respondent categorically denies all allegations. The actions taken were within the purview of statutory authority as defined under Section 12 of the relevant Act. The petition is frivolous and liable to be dismissed with costs.",
+    },
   ],
 };
 
@@ -710,7 +855,6 @@ function JudgeEvidenceModal({ ev, caseId, onClose }) {
         <h2 className="judge-modal-title">{ev.title}</h2>
         <div className="judge-modal-meta-row">
           {[
-            ["Belongs To", partyLabel],
             ["Case ID",    caseId],
             ["Uploaded By", ev.uploadedBy],
             ["Date Filed",  ev.uploadDate],
@@ -751,44 +895,33 @@ function JudgeEvidenceCard({ ev, onView, delay }) {
   );
 }
 
-// ─── EVIDENCE PARTY SECTION ───────────────────────────────────────────────────
+// ─── EVIDENCE SECTION (flat, grouped by format) ──────────────────────────────
 
-function JudgeEvidenceSection({ party, evidence, onView }) {
-  const filtered = evidence.filter((e) => e.party === party);
-  const heading  = party === "victim" ? "Victim Evidence" : "Accused Evidence";
-  const sublabel = party === "victim" ? "Prosecution Submissions" : "Defense Submissions";
-
+function JudgeEvidenceSection({ evidence, onView }) {
   let idx = 0;
   return (
-    <div className={`judge-evidence-party ${party}`}>
-      <p className={`judge-party-sublabel ${party}`}>{sublabel}</p>
-      <h2 className={`judge-party-heading ${party}`}>{heading}</h2>
-      <hr className={`judge-party-rule ${party}`} />
-
+    <div className="judge-evidence-party victim">
       {FORMAT_ORDER.map((fmt) => {
-        const items = filtered.filter((e) => e.format === fmt);
+        const items = evidence.filter((e) => e.format === fmt);
         const base  = idx;
         idx += items.length;
+        if (items.length === 0) return null;
         return (
           <div className="judge-format-group" key={fmt}>
             <div className="judge-format-heading">
               <span className="judge-format-icon">{FORMAT_ICONS[fmt]}</span>
               {FORMAT_LABELS[fmt]}
             </div>
-            {items.length === 0 ? (
-              <p className="judge-no-evidence">No evidence submitted</p>
-            ) : (
-              <div className="judge-evidence-list">
-                {items.map((ev, i) => (
-                  <JudgeEvidenceCard
-                    key={ev.id}
-                    ev={ev}
-                    onView={onView}
-                    delay={(base + i) * 0.07}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="judge-evidence-list">
+              {items.map((ev, i) => (
+                <JudgeEvidenceCard
+                  key={ev.id}
+                  ev={ev}
+                  onView={onView}
+                  delay={(base + i) * 0.07}
+                />
+              ))}
+            </div>
           </div>
         );
       })}
@@ -799,21 +932,13 @@ function JudgeEvidenceSection({ party, evidence, onView }) {
 // ─── JUDGE DASHBOARD ─────────────────────────────────────────────────────────
 
 export function JudgeDashboard({ onViewCase, onLogout }) {
-  const { user } = useAuth();
-  const profile = judgeProfiles[user?.username];
-  const myCases = judgeCases.filter(
-    c => c.court === profile?.court && c.presidingJudgeId === profile?.id
-  );
-
   return (
     <div className="judge-dashboard">
       <div className="judge-topbar">
         <div>
           <p className="judge-eyebrow">Judiciary Portal — EviChain</p>
           <h1 className="judge-title">Court Case Management</h1>
-          <p className="judge-subtitle">
-            {profile ? `${profile.court} · ${profile.name}` : "Active docket"}
-          </p>
+          <p className="judge-subtitle">Active docket — presiding cases</p>
         </div>
         <button className="judge-logout-btn" onClick={onLogout}>← Logout</button>
       </div>
@@ -821,39 +946,36 @@ export function JudgeDashboard({ onViewCase, onLogout }) {
       <JudgeDivider />
 
       <div className="judge-cases-list">
-        {myCases.length === 0 ? (
-          <p style={{ color: "rgba(240,234,216,0.3)", fontStyle: "italic", fontSize: "13px", fontFamily: "'Josefin Sans', sans-serif" }}>
-            No active cases assigned to you.
-          </p>
-        ) : (
-          myCases.map((c, i) => (
-            <div
-              key={c.id}
-              className="judge-case-card"
-              style={{ animationDelay: `${i * 0.08}s` }}
-              onClick={() => onViewCase(c.id)}
-            >
-              <div>
-                <div className="judge-case-id">{c.id}</div>
-                <div className="judge-case-title">{c.title}</div>
-                <div className="judge-case-court">🏛 {c.court}</div>
-              </div>
-              <span className={`judge-badge ${statusBadgeClass(c.status)}`}>
-                {c.status}
-              </span>
-              <div className="judge-date-col">
-                <div className="judge-date-label">Next Hearing</div>
-                <div className="judge-date-val">{c.nextHearing}</div>
-              </div>
-              <button
-                className="judge-view-btn"
-                onClick={(e) => { e.stopPropagation(); onViewCase(c.id); }}
-              >
-                View →
-              </button>
+        {judgeCases.map((c, i) => (
+          <div
+            key={c.id}
+            className="judge-case-card"
+            style={{ animationDelay: `${i * 0.08}s` }}
+            onClick={() => onViewCase(c.id)}
+          >
+            <div>
+              <div className="judge-case-id">{c.id}</div>
+              <div className="judge-case-title">{c.title}</div>
+              <div className="judge-case-court">🏛 {c.courtName}</div>
             </div>
-          ))
-        )}
+
+            <span className={`judge-badge ${statusBadgeClass(c.status)}`}>
+              {c.status}
+            </span>
+
+            <div className="judge-date-col">
+              <div className="judge-date-label">Next Hearing</div>
+              <div className="judge-date-val">{c.nextHearing}</div>
+            </div>
+
+            <button
+              className="judge-view-btn"
+              onClick={(e) => { e.stopPropagation(); onViewCase(c.id); }}
+            >
+              View →
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -862,39 +984,17 @@ export function JudgeDashboard({ onViewCase, onLogout }) {
 // ─── JUDGE CASE DETAILS ───────────────────────────────────────────────────────
 
 export function JudgeCaseDetails({ caseId, onBack }) {
-  const { user } = useAuth();
   const [selectedEv, setSelectedEv] = useState(null);
 
-  const profile  = judgeProfiles[user?.username];
   const caseData = judgeCases.find((c) => c.id === caseId);
   const evidence = evidenceByCase[caseId] || [];
-
-  // ── Unauthorized access check ──
-  const isAuthorized = caseData
-    && caseData.court === profile?.court
-    && caseData.presidingJudgeId === profile?.id;
 
   if (!caseData) return (
     <div className="judge-dashboard">
       <button className="judge-back-btn" onClick={onBack}>← Back</button>
-      <p style={{ color: "rgba(240,234,216,0.3)", fontStyle: "italic", fontSize: "13px", fontFamily: "'Josefin Sans', sans-serif", marginTop: "2rem" }}>
+      <p style={{ color: "rgba(240,234,216,0.4)", marginTop: "2rem", fontFamily: "'Josefin Sans', sans-serif", fontSize: "13px" }}>
         Case record not found.
       </p>
-    </div>
-  );
-
-  if (!isAuthorized) return (
-    <div className="judge-dashboard">
-      <button className="judge-back-btn" onClick={onBack}>← Back</button>
-      <div style={{ marginTop: "3rem", textAlign: "center" }}>
-        <p style={{ fontSize: "2rem", marginBottom: "1rem" }}>⚠️</p>
-        <p style={{ color: "#fb923c", fontFamily: "'Cormorant Garamond', serif", fontSize: "1.5rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-          Unauthorized Access
-        </p>
-        <p style={{ color: "rgba(240,234,216,0.35)", fontSize: "12px", fontFamily: "'Josefin Sans', sans-serif", letterSpacing: "0.1em" }}>
-          This case is outside your court jurisdiction or not assigned to you.
-        </p>
-      </div>
     </div>
   );
 
@@ -908,10 +1008,10 @@ export function JudgeCaseDetails({ caseId, onBack }) {
 
         <div className="judge-meta-grid">
           {[
-            ["Case ID",         caseData.id],
-            ["Court",           caseData.court],
-            ["Presiding Judge", profile.name],
-            ["Next Hearing",    caseData.nextHearing],
+            ["Case ID",          caseData.id],
+            ["Court",            caseData.courtName],
+            ["Presiding Judge",  caseData.presidingJudge],
+            ["Next Hearing",     caseData.nextHearing],
           ].map(([l, v]) => (
             <div className="judge-meta-item" key={l}>
               <span className="judge-meta-label">{l}</span>
@@ -938,13 +1038,16 @@ export function JudgeCaseDetails({ caseId, onBack }) {
         </p>
       ) : (
         <div className="judge-evidence-sections">
-          <JudgeEvidenceSection party="victim"  evidence={evidence} onView={setSelectedEv} />
-          <JudgeEvidenceSection party="accused" evidence={evidence} onView={setSelectedEv} />
+          <JudgeEvidenceSection evidence={evidence} onView={setSelectedEv} />
         </div>
       )}
 
       {selectedEv && (
-        <JudgeEvidenceModal ev={selectedEv} caseId={caseId} onClose={() => setSelectedEv(null)} />
+        <JudgeEvidenceModal
+          ev={selectedEv}
+          caseId={caseId}
+          onClose={() => setSelectedEv(null)}
+        />
       )}
     </div>
   );

@@ -620,37 +620,27 @@ function EvidenceCard({ ev, onView, delay }) {
   );
 }
 
-// ── Evidence Section (party) ──
-function EvidencePartySection({ party, evidence, onView }) {
-  const filtered = evidence.filter((e) => e.party === party);
-  const label = party === "victim" ? "Victim Evidence" : "Accused Evidence";
-  const sublabel = party === "victim" ? "Prosecution's Filed Evidence" : "Defense's Filed Evidence";
-
+// ── Evidence Section (all evidence, grouped by format) ──
+function EvidenceSection({ evidence, onView }) {
   let itemIdx = 0;
   return (
-    <div className={`evidence-party ${party}`}>
-      <p className={`party-label ${party}`}>{sublabel}</p>
-      <h2 className={`party-heading ${party}`}>{label}</h2>
-      <hr className={`party-divider ${party}`} />
+    <div className="evidence-party victim">
       {FORMAT_ORDER.map((fmt) => {
-        const items = filtered.filter((e) => e.format === fmt);
+        const items = evidence.filter((e) => e.format === fmt);
         const groupDelay = itemIdx;
         itemIdx += items.length;
+        if (items.length === 0) return null;
         return (
           <div className="format-group" key={fmt}>
             <div className="format-heading">
               <span className="format-heading-icon">{FORMAT_ICONS[fmt]}</span>
               {FORMAT_LABELS[fmt]}
             </div>
-            {items.length === 0 ? (
-              <p className="no-evidence-text">No evidence available</p>
-            ) : (
-              <div className="evidence-list">
-                {items.map((ev, i) => (
-                  <EvidenceCard key={ev.id} ev={ev} onView={onView} delay={(groupDelay + i) * 0.07} />
-                ))}
-              </div>
-            )}
+            <div className="evidence-list">
+              {items.map((ev, i) => (
+                <EvidenceCard key={ev.id} ev={ev} onView={onView} delay={(groupDelay + i) * 0.07} />
+              ))}
+            </div>
           </div>
         );
       })}
@@ -689,7 +679,6 @@ function EvidenceModal({ ev, onClose }) {
         <h2 className="ev-modal-title">{ev.title}</h2>
         <div className="ev-modal-meta-row">
           {[
-            ["Belongs To", partyLabel],
             ["Uploaded By", ev.uploadedBy],
             ["Upload Date", ev.uploadDate],
             ["Format", ev.format.charAt(0).toUpperCase() + ev.format.slice(1)],
@@ -817,8 +806,7 @@ export function LawyerCaseDetails({ caseId, onBack }) {
         </p>
       ) : (
         <div className="evidence-sections">
-          <EvidencePartySection party="victim"  evidence={evidence} onView={setSelectedEv} />
-          <EvidencePartySection party="accused" evidence={evidence} onView={setSelectedEv} />
+          <EvidenceSection evidence={evidence} onView={setSelectedEv} />
         </div>
       )}
 

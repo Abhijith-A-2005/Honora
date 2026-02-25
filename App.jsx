@@ -20,7 +20,7 @@ const LandingPage = () => (
   <>
     <HeroSection />
     <footer className="footer">
-      <p>© 2025 EviChain · Federal Evidence Management System · All Rights Reserved</p>
+      <p>© 2025 Honora · Federal Evidence Management System · All Rights Reserved</p>
       <p className="footer-sub">Authorized Personnel Only · Unauthorized Access is a Federal Offense</p>
     </footer>
   </>
