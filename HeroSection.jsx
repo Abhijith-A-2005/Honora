@@ -28,8 +28,7 @@ export default function HeroSection() {
         </div>
 
         <h1 className="hero-title">
-          <span className="title-ev">Evi</span>
-          <span className="title-chain">Chain</span>
+          <span className="title-chain">Honora</span>
         </h1>
 
         <div className="hero-tagline-wrapper">

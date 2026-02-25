@@ -13,8 +13,8 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="nav-logo">
-        <span className="logo-ev">Evi</span>
-        <span className="logo-chain">Chain</span>
+        
+        <span className="logo-chain">Honora</span>
       </Link>
       <div className="nav-right">
         <div className="nav-status">
