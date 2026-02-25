@@ -6,6 +6,13 @@ import HeroSection from "./HeroSection";
 import RoleSelection from "./RoleSelection";
 import PoliceDashboard from "./PoliceDashboard";
 import CaseDetails from "./CaseDetails";
+
+import LawyerDashboardPage from "./LawyerDashboardPage";
+import LawyerCaseDetailsPage from "./LawyerCaseDetailsPage";
+
+import JudgeDashboardPage from "./JudgeDashboardPage";
+import JudgeCaseDetailsPage from "./JudgeCaseDetailsPage";
+
 import "./App.css";
 
 // Landing page (Hero + footer)
@@ -22,7 +29,7 @@ const LandingPage = () => (
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ParticleField />
         <Navbar />
         <Routes>
@@ -30,6 +37,12 @@ export default function App() {
           <Route path="/role"                      element={<RoleSelection />} />
           <Route path="/dashboard/police"          element={<PoliceDashboard />} />
           <Route path="/dashboard/police/case/:id" element={<CaseDetails />} />
+
+          <Route path="/dashboard/lawyer"          element={<LawyerDashboardPage />} />
+          <Route path="/dashboard/lawyer/case/:id" element={<LawyerCaseDetailsPage />} />
+
+          <Route path="/dashboard/judge"          element={<JudgeDashboardPage />} />
+          <Route path="/dashboard/judge/case/:id" element={<JudgeCaseDetailsPage />} />
           {/* Catch-all → landing */}
           <Route path="*"                          element={<LandingPage />} />
         </Routes>

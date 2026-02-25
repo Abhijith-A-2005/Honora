@@ -6,13 +6,13 @@ import { CloseIcon, ShieldIcon, GavelIcon, CourthouseIcon } from "./Icons";
 const ROLE_ICONS = {
   "Police Department": ShieldIcon,
   "Legal Counsel": GavelIcon,
-  Judiciary: CourthouseIcon,
+   "Judiciary": CourthouseIcon,
 };
 
 const ROLE_ROUTES = {
   "Police Department": "/dashboard/police",
-  "Legal Counsel": "/dashboard/police", // expand later
-  Judiciary: "/dashboard/police",       // expand later
+  "Legal Counsel": "/dashboard/lawyer", // expand later
+  "Judiciary": "/dashboard/judge",       // expand later
 };
 
 export default function LoginModal({ role, onClose }) {
