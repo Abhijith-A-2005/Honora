@@ -1,0 +1,183 @@
+/* ─── SHARED COMPONENT STYLES ────────────────────────────────────────────────── */
+
+/* ── Buttons ── */
+.btn-gold {
+  background: linear-gradient(135deg,#D4AF37 0%,#b8962a 50%,#D4AF37 100%);
+  background-size: 200% 200%;
+  color: #0f0f0f;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1.8rem;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--transition-bounce), box-shadow 0.3s ease;
+  animation: btnGlow 3s ease-in-out infinite;
+}
+.btn-gold:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 0 35px rgba(212,175,55,0.65), 0 8px 20px rgba(0,0,0,0.3); }
+
+.btn-logout, .back-btn {
+  background: none;
+  border: 1px solid var(--brown-border);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.btn-logout:hover, .back-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.back-btn { margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+
+/* ── Badges ── */
+.badge {
+  padding: 0.28rem 0.75rem;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-open          { background:rgba(52,211,153,0.12);  color:var(--color-open);          border:1px solid rgba(52,211,153,0.3);  }
+.badge-trial         { background:rgba(251,146,60,0.12);  color:var(--color-trial);         border:1px solid rgba(251,146,60,0.3);  }
+.badge-hearing       { background:rgba(99,179,237,0.1);   color:var(--color-hearing);       border:1px solid rgba(99,179,237,0.3);  }
+.badge-closed        { background:rgba(148,163,184,0.1);  color:var(--color-closed);        border:1px solid rgba(148,163,184,0.25);}
+.badge-investigation { background:rgba(167,139,250,0.1);  color:var(--color-investigation); border:1px solid rgba(167,139,250,0.3); }
+.badge-prosecution   { background:rgba(212,175,55,0.12);  color:var(--gold);                border:1px solid rgba(212,175,55,0.3);  }
+.badge-defense       { background:rgba(100,150,220,0.12); color:#7aaee8;                    border:1px solid rgba(100,150,220,0.3); }
+
+/* ── Dividers ── */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+  background-size: 200% 100%;
+  margin: 1.4rem 0;
+  opacity: 0.55;
+  animation: shimmerLine 4s ease-in-out infinite;
+}
+.divider-wrapper { display:flex; align-items:center; gap:1rem; margin:1.5rem 0; }
+.divider-line    { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); opacity:0.4; animation:shimmerLine 4s ease-in-out infinite; }
+.divider-icon    { color:var(--gold); opacity:0.5; font-size:14px; flex-shrink:0; }
+
+/* ── Modals ── */
+.overlay {
+  position:fixed; inset:0;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(10px);
+  display:flex; align-items:center; justify-content:center;
+  z-index:1000;
+  animation: fadeIn 0.25s ease;
+}
+.modal-close-btn {
+  position:absolute; top:1rem; right:1rem;
+  background:none; border:1px solid var(--gold-dim); color:var(--gold);
+  width:30px; height:30px; border-radius:50%;
+  cursor:pointer; font-size:12px;
+  display:flex; align-items:center; justify-content:center;
+  transition: all var(--transition-fast);
+}
+.modal-close-btn:hover { background:var(--gold-glow); box-shadow:0 0 10px var(--gold-dim); }
+.modal-role-tag  { font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); opacity:0.7; margin-bottom:0.6rem; }
+.modal-title     { font-family:var(--font-display); font-size:1.8rem; font-weight:600; color:var(--text); margin-bottom:2rem; }
+.modal-field     { display:flex; flex-direction:column; gap:0.4rem; margin-bottom:1rem; }
+.modal-label     { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); }
+.modal-input     { background:rgba(255,255,255,0.04); border:1px solid var(--brown-border); border-radius:8px; padding:0.75rem 1rem; color:var(--text); font-family:var(--font-ui); font-size:13px; outline:none; transition:border-color var(--transition-fast), box-shadow var(--transition-fast); }
+.modal-input:focus { border-color:var(--gold); box-shadow:0 0 12px var(--gold-glow); }
+.modal-submit    { width:100%; margin-top:0.8rem; padding:0.85rem; font-size:12px; letter-spacing:0.15em; }
+
+/* Login modal container */
+.login-modal {
+  background: linear-gradient(145deg,rgba(28,16,4,0.98),rgba(20,11,2,0.98));
+  border: 1px solid rgba(212,175,55,0.45);
+  border-radius: var(--radius-lg);
+  padding: 2.8rem 2.5rem;
+  width:90%; max-width:400px;
+  position:relative;
+  box-shadow: var(--shadow-modal);
+  animation: scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Evidence modal */
+.ev-modal {
+  background: linear-gradient(145deg,rgba(18,10,2,0.98),rgba(22,12,3,0.99));
+  border: 1px solid rgba(212,175,55,0.45);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  width:90%; max-width:700px; max-height:85vh; overflow-y:auto;
+  position:relative;
+  box-shadow: 0 0 80px rgba(212,175,55,0.15), 0 40px 80px rgba(0,0,0,0.65);
+  animation: scaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.ev-modal-tag        { font-size:9px; letter-spacing:0.25em; text-transform:uppercase; color:var(--gold); opacity:0.6; margin-bottom:0.4rem; }
+.ev-modal-title      { font-family:var(--font-display); font-size:1.8rem; font-weight:600; color:var(--text); margin-bottom:1rem; }
+.ev-modal-meta-row   { display:flex; flex-wrap:wrap; gap:1.2rem; margin-bottom:0.8rem; }
+.ev-modal-meta-item  { display:flex; flex-direction:column; gap:0.18rem; }
+.ev-modal-meta-label { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(212,175,55,0.5); }
+.ev-modal-meta-value { font-size:12px; color:var(--text); }
+.ev-modal-desc       { font-size:12px; color:var(--text-muted); line-height:1.7; margin-bottom:1rem; }
+.ev-preview-area     { margin-top:1.2rem; }
+.ev-preview-video, .ev-preview-audio { width:100%; border-radius:10px; background:#000; }
+.ev-preview-img      { width:100%; max-height:380px; object-fit:contain; border-radius:10px; border:1px solid rgba(212,175,55,0.15); }
+.ev-preview-text     { background:rgba(255,255,255,0.03); border:1px solid rgba(212,175,55,0.18); border-radius:10px; padding:1.5rem; font-size:13px; line-height:1.8; color:rgba(240,234,216,0.65); max-height:300px; overflow-y:auto; white-space:pre-wrap; font-family:'Courier New',monospace; }
+.ev-preview-placeholder { text-align:center; padding:3rem; color:rgba(212,175,55,0.3); font-size:13px; border:1px dashed rgba(212,175,55,0.18); border-radius:10px; line-height:2; }
+
+/* ── Evidence Cards ── */
+.evidence-card { background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:1rem 1.2rem; display:flex; align-items:center; gap:1rem; transition:border-color var(--transition-fast),transform var(--transition-fast),background var(--transition-fast); animation:fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+.evidence-card:hover { background:rgba(212,175,55,0.04); border-color:var(--gold-dim); transform:translateX(4px); }
+.ev-format-icon { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; background:rgba(212,175,55,0.08); color:var(--gold); border:1px solid rgba(212,175,55,0.15); }
+.ev-body        { flex:1; min-width:0; }
+.ev-title       { font-family:var(--font-display); font-size:0.95rem; font-weight:600; color:var(--text); margin-bottom:0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ev-desc        { font-size:11px; color:var(--text-muted); margin-bottom:0.35rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ev-meta        { display:flex; gap:1rem; font-size:10px; color:rgba(255,255,255,0.25); }
+.ev-view-btn    { padding:0.42rem 1rem; font-size:10px; letter-spacing:0.12em; flex-shrink:0; }
+
+/* Evidence section container */
+.evidence-container { border-radius:var(--radius-lg); padding:2rem; border:1px solid var(--brown-border); background:linear-gradient(145deg,rgba(28,16,4,0.7),rgba(22,12,2,0.8)); animation:fadeUp 0.5s ease both; }
+.evidence-list    { display:flex; flex-direction:column; gap:0.7rem; }
+.evidence-sections{ display:flex; flex-direction:column; gap:2.5rem; }
+.format-group     { margin-bottom:1.8rem; }
+.format-heading   { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-muted); margin-bottom:0.8rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:0.5rem; }
+.format-heading-icon { color:var(--gold); opacity:0.7; font-size:12px; }
+.no-evidence-text { font-size:11px; color:rgba(255,255,255,0.18); font-style:italic; padding:0.6rem 0; }
+
+/* ── Meta Grid ── */
+.meta-grid  { display:flex; flex-wrap:wrap; gap:2rem; margin-top:1.2rem; }
+.meta-item  { display:flex; flex-direction:column; gap:0.25rem; }
+.meta-label { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; color:rgba(212,175,55,0.5); }
+.meta-value { font-size:13px; color:var(--text); font-weight:400; }
+
+/* ── Case list ── */
+.cases-list { display:flex; flex-direction:column; gap:1rem; margin-top:0.5rem; }
+
+/* ── Lawyer case card ── */
+.lawyer-case-card { background:linear-gradient(135deg,rgba(30,18,4,0.92) 0%,rgba(22,13,3,0.96) 100%); border:1px solid var(--brown-border); border-radius:var(--radius); padding:1.4rem 1.8rem; display:grid; grid-template-columns:1fr auto auto auto; align-items:center; gap:1.2rem; cursor:pointer; transition:transform var(--transition-bounce),border-color 0.3s,box-shadow 0.3s; animation:slideCard 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+.lawyer-case-card:hover { transform:translateX(6px); border-color:var(--gold-dim); box-shadow:var(--shadow-card); }
+.case-id-tag    { font-size:10px; letter-spacing:0.18em; color:rgba(212,175,55,0.55); margin-bottom:0.3rem; }
+.case-card-title{ font-family:var(--font-display); font-size:1.1rem; font-weight:600; color:var(--text); }
+.case-card-court{ font-size:11px; color:var(--text-muted); margin-top:0.25rem; }
+.case-date      { font-size:11px; color:var(--text-muted); white-space:nowrap; }
+
+/* ── Role card ── */
+.role-card { background:linear-gradient(145deg,rgba(35,20,5,0.9),rgba(22,13,2,0.95)); border:1px solid var(--brown-border); border-radius:var(--radius-lg); padding:2.5rem 2rem; width:200px; text-align:center; cursor:pointer; transition:transform var(--transition-bounce),box-shadow 0.3s ease,border-color 0.3s ease; }
+.role-card:hover { transform:translateY(-8px) scale(1.03); border-color:var(--gold); box-shadow:0 0 40px rgba(212,175,55,0.2),0 20px 40px rgba(0,0,0,0.5); }
+.role-card.active{ border-color:var(--gold); box-shadow:var(--shadow-gold); }
+.role-icon  { font-size:2.4rem; margin-bottom:0.8rem; display:block; }
+.role-label { font-family:var(--font-display); font-size:1.1rem; font-weight:600; color:var(--gold); margin-bottom:0.4rem; }
+.role-desc  { font-size:11px; color:var(--text-muted); letter-spacing:0.06em; line-height:1.6; }
+
+/* ── Responsive ── */
+@media (max-width:700px) {
+  .lawyer-case-card { grid-template-columns:1fr; }
+  .meta-grid        { gap:1.2rem; }
+  .evidence-container{ padding:1.4rem; }
+  .ev-modal         { padding:1.8rem; }
+  .evidence-card    { flex-wrap:wrap; }
+  .ev-view-btn      { width:100%; }
+}

@@ -1,0 +1,24 @@
+/* ─── ANIMATIONS ─────────────────────────────────────────────────────────────── */
+@keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn  { from { opacity:0; transform:scale(0.93) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }
+@keyframes slideCard{ from { opacity:0; transform:translateX(-20px); } to { opacity:1; transform:translateX(0); } }
+@keyframes shimmerLine {
+  0%,100% { opacity:0.4; background-position:0% 50%; }
+  50%     { opacity:1;   background-position:100% 50%; }
+}
+@keyframes goldPulse {
+  0%,100% { text-shadow: 0 0 8px rgba(212,175,55,0.3); }
+  50%     { text-shadow: 0 0 22px rgba(212,175,55,0.7), 0 0 40px rgba(212,175,55,0.2); }
+}
+@keyframes btnGlow {
+  0%,100% { box-shadow: 0 0 12px rgba(212,175,55,0.3); }
+  50%     { box-shadow: 0 0 26px rgba(212,175,55,0.6); }
+}
+
+/* Judge-specific (prefixed to avoid collision) */
+@keyframes jFadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+@keyframes jSlideIn  { from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:translateX(0); } }
+@keyframes jGoldPulse{ 0%,100%{text-shadow:0 0 8px rgba(212,175,55,0.3);} 50%{text-shadow:0 0 22px rgba(212,175,55,0.7);} }
+@keyframes jBtnGlow  { 0%,100%{box-shadow:0 0 10px rgba(212,175,55,0.25);} 50%{box-shadow:0 0 24px rgba(212,175,55,0.55);} }
+@keyframes jShimmer  { 0%,100%{opacity:0.4;background-position:0% 50%;} 50%{opacity:1;background-position:100% 50%;} }
