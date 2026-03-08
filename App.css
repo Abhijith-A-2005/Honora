@@ -265,9 +265,14 @@ body {
 .rc-icon   { width: 56px; height: 56px; color: var(--gold-dim); transition: all 0.4s var(--ease); }
 .rc-title  { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: 0.05em; }
 .rc-desc   { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
-.rc-footer { margin-top: 8px; }
+.rc-footer { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
 .rc-cta    { font-size: 0.8rem; color: var(--gold); letter-spacing: 0.12em; font-weight: 600; transition: letter-spacing 0.3s var(--ease); }
 .role-card:hover .rc-cta { letter-spacing: 0.2em; }
+.rc-link { font-size: 0.75rem; color: var(--text-dim); background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; align-self: flex-start; }
+.rc-link:hover { color: var(--gold); }
+
+.add-case-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 0.9rem; }
+.add-case-btn .btn-icon { display: flex; }
 
 /* ─── LOGIN MODAL ─────────────────────────────────────────────────────────── */
 .modal-overlay {
@@ -319,6 +324,9 @@ body {
 .modal-btn   { width: 100%; margin-top: 8px; justify-content: center; }
 .modal-error { font-size: 0.82rem; color: var(--danger); text-align: center; letter-spacing: 0.05em; }
 .modal-notice { font-size: 0.7rem; color: var(--text-muted); text-align: center; letter-spacing: 0.04em; line-height: 1.6; margin-top: -4px; }
+.modal-switch { font-size: 0.8rem; color: var(--text-dim); text-align: center; margin-top: 4px; }
+.modal-switch .link-button { background: none; border: none; color: var(--gold); cursor: pointer; font-weight: 600; text-decoration: underline; padding: 0; font-size: inherit; }
+.modal-switch .link-button:hover { opacity: 0.8; }
 
 /* ─── POLICE DASHBOARD ────────────────────────────────────────────────────── */
 .dashboard-page {

@@ -15,7 +15,7 @@ const addCardRipple = (e, cb) => {
   cb && cb();
 };
 
-const RoleCard = ({ role, icon, description, onClick }) => (
+const RoleCard = ({ role, icon, description, onClick, onSignup }) => (
   <div className="role-card" onClick={(e) => addCardRipple(e, onClick)}>
     <div className="card-glow" />
     <div className="rc-icon">{icon}</div>
@@ -23,12 +23,30 @@ const RoleCard = ({ role, icon, description, onClick }) => (
     <p className="rc-desc">{description}</p>
     <div className="rc-footer">
       <span className="rc-cta">Authenticate →</span>
+      {onSignup && (
+        <button
+          type="button"
+          className="rc-link"
+          onClick={(e) => {
+            e.stopPropagation();
+            addCardRipple(e, onSignup);
+          }}
+        >
+          Sign up
+        </button>
+      )}
     </div>
   </div>
 );
 
 export default function RoleSelection() {
   const [selectedRole, setSelectedRole] = useState(null);
+  const [isSignup, setIsSignup] = useState(false);
+
+  const openModal = (role, signup = false) => {
+    setSelectedRole(role);
+    setIsSignup(signup);
+  };
 
   return (
     <>
@@ -45,25 +63,35 @@ export default function RoleSelection() {
             role="Police Department"
             icon={<ShieldIcon />}
             description="Submit, manage and track physical and digital evidence from the field to the evidence room."
-            onClick={() => setSelectedRole("Police Department")}
+            onClick={() => openModal("Police Department", false)}
+            onSignup={() => openModal("Police Department", true)}
           />
           <RoleCard
             role="Legal Counsel"
             icon={<GavelIcon />}
             description="Review evidence chains, request disclosures, and prepare case documentation for court."
-            onClick={() => setSelectedRole("Legal Counsel")}
+            onClick={() => openModal("Legal Counsel", false)}
+            onSignup={() => openModal("Legal Counsel", true)}
           />
           <RoleCard
             role="Judiciary"
             icon={<CourthouseIcon />}
             description="Oversee evidence integrity, approve access requests, and issue rulings on admissibility."
-            onClick={() => setSelectedRole("Judiciary")}
+            onClick={() => openModal("Judiciary", false)}
+            onSignup={() => openModal("Judiciary", true)}
           />
         </div>
       </section>
 
       {selectedRole && (
-        <LoginModal role={selectedRole} onClose={() => setSelectedRole(null)} />
+        <LoginModal
+          role={selectedRole}
+          initialSignup={isSignup}
+          onClose={() => {
+            setSelectedRole(null);
+            setIsSignup(false);
+          }}
+        />
       )}
     </>
   );
