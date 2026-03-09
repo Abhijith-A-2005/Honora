@@ -302,3 +302,257 @@ export const JUDGE_EVIDENCE = {
   ],
   "CRT-2026-006": [],
 };
+
+// ─── FORENSIC REPORTS ────────────────────────────────────────────────────────
+
+export const FORENSIC_REPORTS = {
+  "EC-2024-001": [
+    {
+      id: "FR-001-DNA",
+      title: "DNA Analysis Report",
+      description: "Comprehensive DNA profiling from biological evidence collected at the scene.",
+      format: "text",
+      uploadedBy: "Dr. M. Patel",
+      uploadDate: "2024-11-25",
+      fileUrl: null,
+      textContent: `DNA ANALYSIS REPORT
+Case ID: EC-2024-001
+Case Title: Downtown Bank Robbery
+Analysis Date: November 25, 2024
+Analyst: Dr. M. Patel, ID: 301
+
+EVIDENCE EXAMINED:
+- Sample A: Blood recovered from teller station (3.2 mL)
+- Sample B: Skin cells from cash drawer (presumed suspect)
+- Sample C: Control sample (victim)
+
+METHODOLOGY:
+STR profiling using 16-locus system with mitochondrial DNA cross-reference.
+
+FINDINGS:
+Sample A: DNA profile matches known offender database record #DK-4419
+Confidence Level: 99.98%
+Sample B: DNA profile matches known offender database record #DK-5821
+Confidence Level: 99.97%
+
+CONCLUSION:
+Evidence supports presence of at least two known offenders at the crime scene.
+Further comparison against suspect profiles from ongoing investigation recommended.
+
+Report Classification: Evidence for Court Proceedings
+Certified by: Dr. M. Patel, Certified DNA Analyst`,
+      isNew: false,
+    },
+    {
+      id: "FR-001-FP",
+      title: "Fingerprint Analysis Report",
+      description: "Fingerprint examination results from evidence collected at the scene.",
+      format: "text",
+      uploadedBy: "Dr. M. Patel",
+      uploadDate: "2024-11-26",
+      fileUrl: null,
+      textContent: `FINGERPRINT ANALYSIS REPORT
+Case ID: EC-2024-001
+Case Title: Downtown Bank Robbery
+Analysis Date: November 26, 2024
+Examiner: Analyst A. Joshi, ID: 303
+
+SURFACES EXAMINED:
+- ATM machine keypad (16 prints recovered)
+- Counter drawer handle (8 prints recovered)
+- Robbery note (3 prints recovered)
+- Cash register (12 prints recovered)
+
+COMPARISON RESULTS:
+Print A (ATM keypad): MATCH - Offender profile #RP-2847 (Confidence: 100%)
+Print B (Counter drawer): MATCH - Offender profile #RP-3104 (Confidence: 99.9%)
+Print C (Robbery note): MATCH - Offender profile #RP-2847 (Confidence: 99.8%)
+Remaining prints: No database matches found
+
+CONCLUSION:
+Physical evidence strongly corroborates presence of at least two identified suspects.
+Fingerprint patterns consistent with violent handling of objects.
+
+Certified by: Analyst A. Joshi, Certified Fingerprint Examiner`,
+      isNew: false,
+    },
+  ],
+  "EC-2024-002": [
+    {
+      id: "FR-002-DIG",
+      title: "Digital Forensic Analysis Report",
+      description: "Comprehensive digital forensics report on the server intrusion.",
+      format: "text",
+      uploadedBy: "Dr. R. Kumar",
+      uploadDate: "2024-12-10",
+      fileUrl: null,
+      textContent: `DIGITAL FORENSIC ANALYSIS REPORT
+Case ID: EC-2024-002
+Case Title: Cybercrime — Corporate Data Breach
+Analysis Date: December 10, 2024
+Lead Analyst: Dr. R. Kumar, ID: 302
+
+EXECUTIVE SUMMARY:
+Analysis of compromised Nexus Technologies servers reveals sophisticated 
+multi-stage intrusion with estimated 47,000 records exfiltrated.
+
+ATTACK TIMELINE:
+Nov 28, 2024 02:13 UTC - Initial VPN exploitation
+Nov 28, 2024 03:47 UTC - Lateral movement to database servers
+Nov 29, 2024 18:22 UTC - Data staging
+Nov 30, 2024 01:04 UTC - Exfiltration complete via encrypted tunnel
+
+ATTACK VECTORS:
+1. Zero-day VPN authentication bypass (CVE-PENDING-001)
+2. Credential harvesting via keylogger deployment
+3. Privilege escalation using unpatched kernel exploit
+
+MALWARE SIGNATURES IDENTIFIED:
+- PHANTOM-9 toolkit components (3 distinct modules)
+- Custom data exfiltration utility
+- Anti-forensics countermeasures (partially successful)
+
+ATTRIBUTION INDICATORS:
+Code style, infrastructure, and TTPs consistent with APT-23 group.
+Recommend cross-reference with national intelligence databases.
+
+RECOMMENDATIONS:
+1. Full system reimaging required
+2. All credentials rotated immediately
+3. Third-party security audit mandatory
+4. Implement network segmentation
+5. Deploy advanced threat detection
+
+Report Classification: RESTRICTED - Law Enforcement Only
+Certified by: Dr. R. Kumar, Certified Digital Forensics Examiner`,
+      isNew: false,
+    },
+  ],
+  "EC-2024-004": [
+    {
+      id: "FR-004-CHEM",
+      title: "Chemical Analysis Report",
+      description: "Chemical composition analysis of seized narcotics samples.",
+      format: "text",
+      uploadedBy: "Dr. M. Patel",
+      uploadDate: "2024-11-01",
+      fileUrl: null,
+      textContent: `CHEMICAL ANALYSIS REPORT
+Case ID: EC-2024-004
+Case Title: Narcotics Distribution Ring
+Analysis Date: November 1, 2024
+Chemist: Dr. M. Patel, ID: 301
+
+SAMPLES SUBMITTED:
+- Sample A: White powder (2.4 kg)
+- Sample B: Crystal substance (1.8 kg)
+- Sample C: Tablet form (847 units)
+
+CHEMICAL COMPOSITION:
+Sample A: 87% pure cocaine hydrochloride, 13% adulterants (fentanyl, levamisole)
+Sample B: 92% pure methamphetamine hydrochloride, 8% cutting agents
+Sample C: MDMA composition with pharmaceutical binders
+
+PURITY ASSESSMENT:
+Samples indicate high-grade production with consistent processing methodology.
+Adulterant profile suggests common supplier across seizures.
+
+FINDINGS:
+- Evidence suggests centralized manufacturing or distribution point
+- Consistent adulterant ratios match patterns from 3 other recent seizures
+- Fentanyl contamination poses significant public health risk
+
+CONCLUSION:
+Chemical analysis supports existence of organized distribution network.
+Supply chain analysis recommended for further investigations.
+
+Report Classification: Evidence for Prosecution
+Certified by: Dr. M. Patel, Certified Forensic Chemist`,
+      isNew: false,
+    },
+  ],
+};
+
+// ─── FORENSIC CASE EVIDENCE ──────────────────────────────────────────────────
+
+export const FORENSIC_CASE_EVIDENCE = {
+  "FRN-2026-001": [
+    {
+      id: "FEV-001-001",
+      title: "Bank Robbery Evidence Inventory",
+      description: "Complete inventory of evidence submitted for forensic analysis from the bank robbery case.",
+      format: "text",
+      uploadedBy: "Det. Marcus Reyes",
+      uploadDate: "2024-11-13",
+      fileUrl: null,
+      textContent: `EVIDENCE INVENTORY - FRN-2026-001
+Case: Downtown Bank Robbery (EC-2024-001)
+
+BIOLOGICAL EVIDENCE:
+- Blood samples from teller station (3 samples)
+- Skin cells from cash drawer
+- Saliva from robbery note
+
+PHYSICAL EVIDENCE:
+- Fingerprints from counter (multiple lifts)
+- Glass fragments from display case
+- Fiber samples from clothing donations
+
+STATUS: Received and catalogued
+Next Step: DNA analysis in progress`,
+    },
+  ],
+  "FRN-2026-002": [
+    {
+      id: "FEV-002-001",
+      title: "Digital Evidence Log",
+      description: "Log of digital evidence and forensic examination procedures.",
+      format: "text",
+      uploadedBy: "Sgt. Priya Nair",
+      uploadDate: "2024-12-02",
+      fileUrl: null,
+      textContent: `DIGITAL EVIDENCE LOG - FRN-2026-002
+Case: Corporate Data Breach (EC-2024-002)
+
+SERVER IMAGES RECEIVED:
+- Database Server 1 (4.2 TB)
+- Database Server 2 (3.8 TB)
+- Web Application Server (2.1 TB)
+- Email Server (5.6 TB)
+
+FORENSIC EXAMINATION PROCEDURES:
+1. Chain of custody maintained
+2. Write-blocker used for all analysis
+3. Hash verification passed (SHA-256)
+4. Imaging completed with sector verification
+5. Timeline analysis in progress
+
+STATUS: Evidence secured and authenticated`,
+    },
+  ],
+  "FRN-2026-003": [
+    {
+      id: "FEV-003-001",
+      title: "Narcotics Sample Chain of Custody",
+      description: "Chain of custody documentation for seized narcotics samples.",
+      format: "text",
+      uploadedBy: "Det. Amara Diallo",
+      uploadDate: "2024-10-10",
+      fileUrl: null,
+      textContent: `CHAIN OF CUSTODY - FRN-2026-003
+Case: Narcotics Distribution Ring (EC-2024-004)
+
+SAMPLES TRANSFERRED:
+- Sample A: 2.4 kg white powder
+- Sample B: 1.8 kg crystal substance
+- Sample C: 847 tablets
+
+RECEIVING ANALYST: Dr. M. Patel (ID: 301)
+TRANSFER DATE: October 10, 2024
+CONDITION: All seals intact, no tampering detected
+
+ANALYSIS STATUS: Pending chemical composition testing`,
+    },
+  ],
+  "FRN-2026-004": [],
+};

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../common/useAuth";
 import { MOCK_CASES } from "../../data/mockCases";
-import { MOCK_EVIDENCE } from "../../data/mockEvidence";
+import { MOCK_EVIDENCE, FORENSIC_REPORTS } from "../../data/mockEvidence";
 import EvidenceCard from "../common/EvidenceCard";
 import EvidenceModal from "../common/EvidenceModal";
 import UploadEvidenceModal from "./UploadEvidenceModal";
@@ -36,6 +36,8 @@ export default function CaseDetails() {
   const [evidenceList, setEvidenceList] = useState(() => MOCK_EVIDENCE[id] || []);
   const [viewingEvidence, setViewingEvidence] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
+
+  const forensicReports = FORENSIC_REPORTS[id] || [];
 
   useEffect(() => {
     if (!user) navigate("/role");
@@ -152,6 +154,36 @@ export default function CaseDetails() {
             );
           })}
         </div>
+
+        {/* Forensic Reports Section */}
+        {forensicReports.length > 0 && (
+          <>
+            <GoldenDivider />
+            <div style={{ marginBottom: 36 }}>
+              <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", color: "var(--gold)", fontWeight: 600, marginBottom: 10, textTransform: "uppercase" }}>
+                FORENSIC ANALYSIS
+              </p>
+              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.3rem,3vw,2rem)", color: "var(--text)", fontWeight: 700 }}>
+                Forensic Reports
+              </h2>
+            </div>
+            <div className="evidence-section-title">
+              <span className="ev-section-icon"><DocumentIcon /></span>
+              <h3 className="ev-section-heading">Forensic Reports</h3>
+              <span className="ev-section-count">{forensicReports.length} report{forensicReports.length !== 1 ? "s" : ""}</span>
+            </div>
+            <div className="evidence-grid">
+              {forensicReports.map((ev, i) => (
+                <EvidenceCard
+                  key={ev.id}
+                  evidence={ev}
+                  onView={setViewingEvidence}
+                  delay={i * 0.06}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </main>
 
       {/* Floating upload button */}

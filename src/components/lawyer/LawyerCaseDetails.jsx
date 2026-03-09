@@ -1,8 +1,8 @@
 // pages/lawyer/LawyerCaseDetails.jsx
 
 import { useAuth } from "../common/useAuth";
-import { LAWYER_CASES }    from "../../data/mockCases";
-import { LAWYER_EVIDENCE } from "../../data/mockEvidence";
+import { LAWYER_CASES, FORENSIC_CASES }    from "../../data/mockCases";
+import { LAWYER_EVIDENCE, FORENSIC_REPORTS } from "../../data/mockEvidence";
 import { LAWYER_PROFILES } from "../../data/mockUsers";
 import { isLawyerAuthorized } from "../../utils/filters";
 import { getStatusBadgeClass, getTypeBadgeClass } from "../../utils/helpers";
@@ -13,6 +13,19 @@ export default function LawyerCaseDetails({ caseId, onBack }) {
   const profile  = LAWYER_PROFILES[user?.username];
   const caseData = LAWYER_CASES.find(c => c.id === caseId);
   const evidence = LAWYER_EVIDENCE[caseId] || [];
+
+  // Find related forensic case and reports by matching case title
+  const getRelatedForensicReports = () => {
+    if (!caseData) return [];
+    
+    // Get forensic reports for the related police case
+    if (caseData.relatedPoliceCaseId) {
+      return FORENSIC_REPORTS[caseData.relatedPoliceCaseId] || [];
+    }
+    return [];
+  };
+
+  const forensicReports = getRelatedForensicReports();
 
   if (!caseData) return (
     <div className="dashboard view">
@@ -79,6 +92,21 @@ export default function LawyerCaseDetails({ caseId, onBack }) {
         </p>
       ) : (
         <EvidenceSection evidence={evidence} caseId={caseId} />
+      )}
+
+      {forensicReports.length > 0 && (
+        <>
+          <div className="gold-divider" />
+          <div style={{ marginBottom: 36 }}>
+            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", color: "var(--gold)", fontWeight: 600, marginBottom: 10, textTransform: "uppercase" }}>
+              FORENSIC ANALYSIS
+            </p>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.3rem,3vw,2rem)", color: "var(--text)", fontWeight: 700 }}>
+              Forensic Report
+            </h2>
+          </div>
+          <EvidenceSection evidence={forensicReports} caseId={caseId} />
+        </>
       )}
     </div>
   );

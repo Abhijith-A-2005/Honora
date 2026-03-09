@@ -14,6 +14,9 @@ import LawyerCaseDetailsPage from "./src/components/lawyer/LawyerCaseDetailsPage
 import JudgeDashboardPage   from "./src/components/judge/JudgeDashboardPage";
 import JudgeCaseDetailsPage from "./src/components/judge/JudgeCaseDetailsPage";
 
+import ForensicDashboardPage   from "./src/components/forensic/ForensicDashboardPage";
+import ForensicCaseDetailsPage from "./src/components/forensic/ForensicCaseDetailsPage";
+
 import "./App.css";
 
 const LandingPage = () => (
@@ -43,6 +46,9 @@ export default function App() {
 
           <Route path="/dashboard/judge"           element={<JudgeDashboardPage />} />
           <Route path="/dashboard/judge/case/:id"  element={<JudgeCaseDetailsPage />} />
+
+          <Route path="/dashboard/forensic"           element={<ForensicDashboardPage />} />
+          <Route path="/dashboard/forensic/case/:id"  element={<ForensicCaseDetailsPage />} />
 
           <Route path="*" element={<LandingPage />} />
         </Routes>

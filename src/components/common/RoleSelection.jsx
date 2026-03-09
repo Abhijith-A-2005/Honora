@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShieldIcon, GavelIcon, CourthouseIcon } from "../../assets/icons/Icons";
+import { ShieldIcon, GavelIcon, CourthouseIcon, ForensicIcon } from "../../assets/icons/Icons";
 import { GoldenDivider } from "./Shared";
 import LoginModal from "./LoginModal";
 
@@ -79,6 +79,13 @@ export default function RoleSelection() {
             description="Oversee evidence integrity, approve access requests, and issue rulings on admissibility."
             onClick={() => openModal("Judiciary", false)}
             onSignup={() => openModal("Judiciary", true)}
+          />
+          <RoleCard
+            role="Forensic Department"
+            icon={<ForensicIcon />}
+            description="Analyze evidence, conduct forensic testing, and document scientific findings for court proceedings."
+            onClick={() => openModal("Forensic Department", false)}
+            onSignup={() => openModal("Forensic Department", true)}
           />
         </div>
       </section>

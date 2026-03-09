@@ -66,19 +66,64 @@ export const MOCK_CASES = [
 // ─── LAWYER CASES ─────────────────────────────────────────────────────────────
 
 export const LAWYER_CASES = [
-  { id: "LGL-2026-001", assignedLawyerId: 201, title: "State vs. Aryan Mehta",   clientName: "Aryan Mehta",  clientType: "Defense",     status: "Trial",   assignedCourt: "District Court, Mumbai",   courtDate: "2026-03-15" },
-  { id: "LGL-2026-002", assignedLawyerId: 202, title: "People vs. Nisha Verma",  clientName: "Nisha Verma",  clientType: "Prosecution", status: "Open",    assignedCourt: "High Court, Delhi",        courtDate: "2026-04-02" },
-  { id: "LGL-2026-003", assignedLawyerId: 201, title: "State vs. Rajan Pillai",  clientName: "Rajan Pillai", clientType: "Defense",     status: "Closed",  assignedCourt: "Sessions Court, Kochi",    courtDate: "2025-12-10" },
-  { id: "LGL-2026-004", assignedLawyerId: 203, title: "Republic vs. Devika Rao", clientName: "Devika Rao",   clientType: "Prosecution", status: "Open",    assignedCourt: "Supreme Court, Delhi",     courtDate: "2026-04-20" },
+  { id: "LGL-2026-001", assignedLawyerId: 201, title: "State vs. Aryan Mehta",   clientName: "Aryan Mehta",  clientType: "Defense",     status: "Trial",   assignedCourt: "District Court, Mumbai",   courtDate: "2026-03-15", relatedPoliceCaseId: "EC-2024-001" },
+  { id: "LGL-2026-002", assignedLawyerId: 202, title: "People vs. Nisha Verma",  clientName: "Nisha Verma",  clientType: "Prosecution", status: "Open",    assignedCourt: "High Court, Delhi",        courtDate: "2026-04-02", relatedPoliceCaseId: "EC-2024-002" },
+  { id: "LGL-2026-003", assignedLawyerId: 201, title: "State vs. Rajan Pillai",  clientName: "Rajan Pillai", clientType: "Defense",     status: "Closed",  assignedCourt: "Sessions Court, Kochi",    courtDate: "2025-12-10", relatedPoliceCaseId: "EC-2024-003" },
+  { id: "LGL-2026-004", assignedLawyerId: 203, title: "Republic vs. Devika Rao", clientName: "Devika Rao",   clientType: "Prosecution", status: "Open",    assignedCourt: "Supreme Court, Delhi",     courtDate: "2026-04-20", relatedPoliceCaseId: "EC-2024-004" },
 ];
 
 // ─── JUDGE CASES ──────────────────────────────────────────────────────────────
 
 export const JUDGE_CASES = [
-  { id: "CRT-2026-001", court: "District Court, Mumbai",   presidingJudgeId: 101, title: "State vs. Aryan Mehta",   status: "Trial",   nextHearing: "2026-03-15" },
-  { id: "CRT-2026-002", court: "High Court, Delhi",        presidingJudgeId: 102, title: "People vs. Nisha Verma", status: "Hearing", nextHearing: "2026-04-02" },
-  { id: "CRT-2026-003", court: "Sessions Court, Kochi",    presidingJudgeId: 103, title: "State vs. Rajan Pillai", status: "Closed",  nextHearing: "—" },
-  { id: "CRT-2026-004", court: "Supreme Court, New Delhi", presidingJudgeId: 104, title: "Republic vs. Devika Rao",status: "Hearing", nextHearing: "2026-03-28" },
+  { id: "CRT-2026-001", court: "District Court, Mumbai",   presidingJudgeId: 101, title: "State vs. Aryan Mehta",   status: "Trial",   nextHearing: "2026-03-15", relatedPoliceCaseId: "EC-2024-001" },
+  { id: "CRT-2026-002", court: "High Court, Delhi",        presidingJudgeId: 102, title: "People vs. Nisha Verma", status: "Hearing", nextHearing: "2026-04-02", relatedPoliceCaseId: "EC-2024-002" },
+  { id: "CRT-2026-003", court: "Sessions Court, Kochi",    presidingJudgeId: 103, title: "State vs. Rajan Pillai", status: "Closed",  nextHearing: "—", relatedPoliceCaseId: "EC-2024-003" },
+  { id: "CRT-2026-004", court: "Supreme Court, New Delhi", presidingJudgeId: 104, title: "Republic vs. Devika Rao",status: "Hearing", nextHearing: "2026-03-28", relatedPoliceCaseId: "EC-2024-004" },
   { id: "CRT-2026-005", court: "District Court, Mumbai",   presidingJudgeId: 101, title: "State vs. Priya Nair",   status: "Hearing", nextHearing: "2026-04-10" },
   { id: "CRT-2026-006", court: "High Court, Delhi",        presidingJudgeId: 999, title: "People vs. Arjun Das",   status: "Trial",   nextHearing: "2026-04-15" },
+];
+
+// ─── FORENSIC CASES ───────────────────────────────────────────────────────────
+
+export const FORENSIC_CASES = [
+  { 
+    id: "FRN-2026-001", 
+    assignedForensicId: 301, 
+    relatedCaseId: "EC-2024-001",
+    title: "Downtown Bank Robbery — Forensic Analysis",
+    status: "In Progress",
+    assignedDate: "2024-11-13",
+    evidenceType: "Financial Records, Digital Traces, Physical Evidence",
+    description: "DNA analysis, fingerprint examination, and digital evidence forensics for the downtown bank robbery case.",
+  },
+  { 
+    id: "FRN-2026-002", 
+    assignedForensicId: 302, 
+    relatedCaseId: "EC-2024-002",
+    title: "Corporate Data Breach — Digital Forensics",
+    status: "In Progress",
+    assignedDate: "2024-12-02",
+    evidenceType: "Server Logs, Network Traffic, Source Code",
+    description: "Digital forensic analysis of server intrusion, data exfiltration patterns, and malware identification.",
+  },
+  { 
+    id: "FRN-2026-003", 
+    assignedForensicId: 302, 
+    relatedCaseId: "EC-2024-004",
+    title: "Narcotics Distribution — Evidence Analysis",
+    status: "Pending",
+    assignedDate: "2024-10-10",
+    evidenceType: "Chemical Compounds, Packaging Materials, Communication Records",
+    description: "Chemical analysis of seized substances, packaging material examination, and digital communication analysis.",
+  },
+  { 
+    id: "FRN-2026-004", 
+    assignedForensicId: 303, 
+    relatedCaseId: "EC-2024-005",
+    title: "Art Theft — Evidence Processing",
+    status: "Pending",
+    assignedDate: "2024-12-19",
+    evidenceType: "Security Equipment, Photography, Physical Artifacts",
+    description: "Processing and documenting security footage, physical evidence from crime scene, and artifact analysis.",
+  },
 ];

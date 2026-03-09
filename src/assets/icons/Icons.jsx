@@ -106,3 +106,10 @@ export const ArrowLeftIcon = () => (
     <polyline points="12 19 5 12 12 5" />
   </svg>
 );
+
+export const ForensicIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="3" />
+    <path d="M12 11v8M8 17h8M6 19h12M9 11l-3 3M15 11l3 3M9 15l-3 3M15 15l3 3" />
+  </svg>
+);

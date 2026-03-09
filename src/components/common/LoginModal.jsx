@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
-import { CloseIcon, ShieldIcon, GavelIcon, CourthouseIcon } from "../../assets/icons/Icons";
+import { CloseIcon, ShieldIcon, GavelIcon, CourthouseIcon, ForensicIcon } from "../../assets/icons/Icons";
 import { addProfile } from "../../data/mockUsers"; // helper for signup
 
 const ROLE_ICONS = {
   "Police Department": ShieldIcon,
   "Legal Counsel": GavelIcon,
    "Judiciary": CourthouseIcon,
+  "Forensic Department": ForensicIcon,
 };
 
 const ROLE_ROUTES = {
   "Police Department": "/dashboard/police",
   "Legal Counsel": "/dashboard/lawyer", // expand later
   "Judiciary": "/dashboard/judge",       // expand later
+  "Forensic Department": "/dashboard/forensic",
 };
 
 export default function LoginModal({ role, onClose, initialSignup = false }) {
@@ -44,7 +46,7 @@ export default function LoginModal({ role, onClose, initialSignup = false }) {
         setError("Please provide your full name.");
         return;
       }
-      if (role === "Police Department" && !extraInfo.trim()) {
+      if ((role === "Police Department" || role === "Forensic Department") && !extraInfo.trim()) {
         setError("Please provide your department name.");
         return;
       }
@@ -67,7 +69,7 @@ export default function LoginModal({ role, onClose, initialSignup = false }) {
           const details = { name: fullName.trim() };
           if (role === "Legal Counsel") details.firm = extraInfo.trim();
           if (role === "Judiciary") details.court = extraInfo.trim();
-          if (role === "Police Department") details.department = extraInfo.trim();
+          if (role === "Police Department" || role === "Forensic Department") details.department = extraInfo.trim();
           addProfile(role, username.trim(), details);
         } catch (err) {
           setError(err.message);
@@ -115,7 +117,7 @@ export default function LoginModal({ role, onClose, initialSignup = false }) {
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
-              {(role === "Legal Counsel" || role === "Judiciary" || role === "Police Department") && (
+              {(role === "Legal Counsel" || role === "Judiciary" || role === "Police Department" || role === "Forensic Department") && (
                 <div className="input-group">
                   <label>
                     {role === "Legal Counsel"

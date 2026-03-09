@@ -17,6 +17,15 @@ export const JUDGE_PROFILES = {
   sharma:   { id: 104, name: "Hon. Chief Justice P. Sharma", court: "Supreme Court, New Delhi"  },
 };
 
+// ─── FORENSIC PROFILES ──────────────────────────────────────────────────────────
+// Key = username entered at login
+
+export const FORENSIC_PROFILES = {
+  dr_patel:    { id: 301, name: "Dr. M. Patel",       department: "Forensic Analysis Lab", specialization: "DNA Analysis" },
+  dr_kumar:    { id: 302, name: "Dr. R. Kumar",       department: "Forensic Analysis Lab", specialization: "Digital Forensics" },
+  analyst_joshi: { id: 303, name: "Analyst A. Joshi", department: "Forensic Analysis Lab", specialization: "Evidence Processing" },
+};
+
 // ─── DEMO CREDENTIALS (for reference) ────────────────────────────────────────
 //
 // Role → Legal Counsel
@@ -32,12 +41,18 @@ export const JUDGE_PROFILES = {
 //
 // Role → Police Department
 //   Any username / any password → full access
+//
+// Role → Forensic Department
+//   dr_patel     →  FRN-2026-001, FRN-2026-002
+//   dr_kumar     →  FRN-2026-002, FRN-2026-003
+//   analyst_joshi → FRN-2026-001, FRN-2026-004
 
-// ─── PROFILE MANAGEMENT HELPERS ──────────────────────────────────────────────
+// ─── PROFILE MANAGEMENT HELPERS ──────────────────────────────────────────────────────────
 // Simple in-memory helpers to support signup flows during development.
 
 let nextLawyerId = Math.max(...Object.values(LAWYER_PROFILES).map(p => p.id)) + 1;
 let nextJudgeId  = Math.max(...Object.values(JUDGE_PROFILES ).map(p => p.id)) + 1;
+let nextForensicId = Math.max(...Object.values(FORENSIC_PROFILES).map(p => p.id)) + 1;
 // even though police currently accept any credentials, we keep a simple
 // registry so that sign-ups can record a department for later inspection.
 export const POLICE_PROFILES = {};
@@ -46,7 +61,7 @@ let nextPoliceId = 1000; // arbitrary starting point
 /**
  * Add a new profile for a given role. Returns the created profile object.
  *
- * This mutates the underlying LAWYER_PROFILES or JUDGE_PROFILES map and
+ * This mutates the underlying LAWYER_PROFILES, JUDGE_PROFILES, or FORENSIC_PROFILES map and
  * increments the internal ID counter. For police we just return a stub since
  * police authentication is open-ended.
  */
@@ -73,6 +88,16 @@ export function addProfile(role, username, details = {}) {
         court: details.court || "",
       };
       JUDGE_PROFILES[username] = profile;
+      return profile;
+    }
+    case "Forensic Department": {
+      const profile = {
+        id: nextForensicId++,
+        name: details.name || username,
+        department: details.department || "",
+        specialization: details.specialization || "",
+      };
+      FORENSIC_PROFILES[username] = profile;
       return profile;
     }
     case "Police Department": {
