@@ -1,81 +1,141 @@
-// pages/judge/JudgeCaseDetails.jsx
-
-import { useAuth } from "../common/useAuth";
-import { JUDGE_CASES, FORENSIC_CASES }    from "../../data/mockCases";
-import { JUDGE_EVIDENCE, FORENSIC_REPORTS, LAWYER_SUPPORTING_DOCUMENTS } from "../../data/mockEvidence";
-import { JUDGE_PROFILES } from "../../data/mockUsers";
-import { isJudgeAuthorized } from "../../utils/filters";
-import { getStatusBadgeClass } from "../../utils/helpers";
-import EvidenceSection from "../common/EvidenceSection";
+import { useAuth } from "../common/useAuth.jsx";
+import { getCaseById, getEvidence, getForensicReports, getLawyerDocuments } from "../../services/api.js";
+import { getStatusBadgeClass } from "../../utils/helpers.js";
+import EvidenceSection from "../common/EvidenceSection.jsx";
+import { useState, useEffect } from "react";
 
 export default function JudgeCaseDetails({ caseId, onBack }) {
   const { user } = useAuth();
-  const profile  = JUDGE_PROFILES[user?.username];
-  const caseData = JUDGE_CASES.find(c => c.id === caseId);
-  const evidence = JUDGE_EVIDENCE[caseId] || [];
+  const [caseData, setCaseData] = useState(null);
+  const [evidence, setEvidence] = useState([]);
+  const [forensicReports, setForensicReports] = useState([]);
+  const [lawyerDocuments, setLawyerDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Find related forensic case and reports by matching case title
-  const getRelatedForensicReports = () => {
-    if (!caseData) return [];
-    
-    // Get forensic reports for the related police case
-    if (caseData.relatedPoliceCaseId) {
-      return FORENSIC_REPORTS[caseData.relatedPoliceCaseId] || [];
+  useEffect(() => {
+    fetchCaseData();
+  }, [caseId]);
+
+  const fetchCaseData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Fetch case details
+      const caseResponse = await getCaseById(decodeURIComponent(caseId));
+      setCaseData(caseResponse.case || caseResponse);
+
+      // Fetch evidence
+      try {
+        const evidenceResponse = await getEvidence(decodeURIComponent(caseId));
+        setEvidence(
+          Array.isArray(evidenceResponse.evidence)
+            ? evidenceResponse.evidence
+            : evidenceResponse || []
+        );
+      } catch (err) {
+        console.log("No evidence:", err.message);
+        setEvidence([]);
+      }
+
+      // Fetch forensic reports
+      try {
+        const forensicResponse = await getForensicReports(decodeURIComponent(caseId));
+        setForensicReports(
+          Array.isArray(forensicResponse.reports)
+            ? forensicResponse.reports
+            : forensicResponse || []
+        );
+      } catch (err) {
+        console.log("No forensic reports:", err.message);
+        setForensicReports([]);
+      }
+
+      // Fetch lawyer documents
+      try {
+        const docsResponse = await getLawyerDocuments(decodeURIComponent(caseId));
+        setLawyerDocuments(
+          Array.isArray(docsResponse.documents)
+            ? docsResponse.documents
+            : docsResponse || []
+        );
+      } catch (err) {
+        console.log("No lawyer documents:", err.message);
+        setLawyerDocuments([]);
+      }
+    } catch (err) {
+      console.error("Error fetching case data:", err);
+      setError(err.message || "Failed to load case details");
+    } finally {
+      setLoading(false);
     }
-    return [];
   };
 
-  // Get lawyer supporting documents for this case
-  const getLawyerSupportingDocuments = () => {
-    if (!caseData) return [];
-    
-    // Convert judge case ID to lawyer case ID (CRT-2026-001 -> LGL-2026-001)
-    const lawyerCaseId = caseData.id.replace('CRT', 'LGL');
-    
-    return LAWYER_SUPPORTING_DOCUMENTS[lawyerCaseId] || [];
-  };
-
-  const forensicReports = getRelatedForensicReports();
-  const lawyerDocuments = getLawyerSupportingDocuments();
-
-  if (!caseData) return (
-    <div className="judge-dashboard">
-      <button className="judge-back-btn" onClick={onBack}>← Back</button>
-      <p style={{ color:"rgba(240,234,216,0.4)", marginTop:"2rem", fontFamily:"'Josefin Sans',sans-serif", fontSize:"13px" }}>
-        Case record not found.
-      </p>
-    </div>
-  );
-
-  if (!isJudgeAuthorized(caseData, profile)) return (
-    <div className="judge-dashboard">
-      <button className="judge-back-btn" onClick={onBack}>← Back</button>
-      <div style={{ marginTop:"3rem", textAlign:"center" }}>
-        <p style={{ fontSize:"2rem", marginBottom:"1rem" }}>⚠️</p>
-        <p style={{ color:"#fb923c", fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", fontWeight:700, marginBottom:"0.5rem" }}>
-          Unauthorized Access
-        </p>
-        <p style={{ color:"rgba(240,234,216,0.35)", fontSize:"12px", fontFamily:"'Josefin Sans',sans-serif", letterSpacing:"0.1em" }}>
-          This case is outside your court jurisdiction or not assigned to you.
+  if (loading) {
+    return (
+      <div className="judge-dashboard">
+        <button className="judge-back-btn" onClick={onBack}>
+          ← Back
+        </button>
+        <p style={{ color: "rgba(240,234,216,0.4)", marginTop: "2rem", fontFamily: "'Josefin Sans',sans-serif", fontSize: "13px" }}>
+          Loading case details...
         </p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="judge-dashboard">
+        <button className="judge-back-btn" onClick={onBack}>
+          ← Back
+        </button>
+        <div
+          style={{
+            padding: "20px",
+            marginTop: "2rem",
+            backgroundColor: "rgba(255,0,0,0.1)",
+            border: "1px solid #ff6b6b",
+            borderRadius: "6px",
+            color: "#ff6b6b",
+          }}
+        >
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!caseData) {
+    return (
+      <div className="judge-dashboard">
+        <button className="judge-back-btn" onClick={onBack}>
+          ← Back
+        </button>
+        <p style={{ color: "rgba(240,234,216,0.4)", marginTop: "2rem", fontFamily: "'Josefin Sans',sans-serif", fontSize: "13px" }}>
+          Case record not found.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="judge-dashboard">
-      <button className="judge-back-btn" onClick={onBack}>← Back to Docket</button>
+      <button className="judge-back-btn" onClick={onBack}>
+        ← Back to Docket
+      </button>
 
-      <div style={{ animation:"jFadeUp 0.45s ease both" }}>
+      <div style={{ animation: "jFadeUp 0.45s ease both" }}>
         <p className="judge-eyebrow">Case Record — {caseData.id}</p>
         <h1 className="judge-title">{caseData.title}</h1>
 
         <div className="judge-meta-grid">
           {[
-            ["Case ID",         caseData.id],
-            ["Court",           caseData.court],
-            ["Presiding Judge", profile.name],
-            ["Next Hearing",    caseData.nextHearing],
+            ["Case ID", caseData.id],
+            ["Court", caseData.court || "N/A"],
+            ["Presiding Judge", user?.username || "Unknown"],
+            ["Next Hearing", caseData.nextHearing || "N/A"],
           ].map(([l, v]) => (
             <div className="judge-meta-item" key={l}>
               <span className="judge-meta-label">{l}</span>
@@ -84,7 +144,10 @@ export default function JudgeCaseDetails({ caseId, onBack }) {
           ))}
           <div className="judge-meta-item">
             <span className="judge-meta-label">Status</span>
-            <span className={`judge-badge ${getStatusBadgeClass(caseData.status)}`} style={{ marginTop:"0.2rem", display:"inline-block" }}>
+            <span
+              className={`judge-badge ${getStatusBadgeClass(caseData.status)}`}
+              style={{ marginTop: "0.2rem", display: "inline-block" }}
+            >
               {caseData.status}
             </span>
           </div>
@@ -94,7 +157,15 @@ export default function JudgeCaseDetails({ caseId, onBack }) {
       <div className="judge-divider" />
 
       {evidence.length === 0 ? (
-        <p style={{ color:"rgba(240,234,216,0.3)", fontStyle:"italic", fontSize:"13px", marginTop:"1rem", fontFamily:"'Josefin Sans',sans-serif" }}>
+        <p
+          style={{
+            color: "rgba(240,234,216,0.3)",
+            fontStyle: "italic",
+            fontSize: "13px",
+            marginTop: "1rem",
+            fontFamily: "'Josefin Sans',sans-serif",
+          }}
+        >
           No evidence has been submitted for this case.
         </p>
       ) : (
@@ -105,10 +176,27 @@ export default function JudgeCaseDetails({ caseId, onBack }) {
         <>
           <div className="judge-divider" />
           <div style={{ marginBottom: 36 }}>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", color: "#D4AF37", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", fontFamily: "'Josefin Sans',sans-serif" }}>
+            <p
+              style={{
+                fontSize: "0.72rem",
+                letterSpacing: "0.3em",
+                color: "#D4AF37",
+                fontWeight: 600,
+                marginBottom: 10,
+                textTransform: "uppercase",
+                fontFamily: "'Josefin Sans',sans-serif",
+              }}
+            >
               FORENSIC ANALYSIS
             </p>
-            <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.3rem,3vw,2rem)", color: "#f0ead8", fontWeight: 700 }}>
+            <h2
+              style={{
+                fontFamily: "'Cormorant Garamond',serif",
+                fontSize: "clamp(1.3rem,3vw,2rem)",
+                color: "#f0ead8",
+                fontWeight: 700,
+              }}
+            >
               Forensic Report
             </h2>
           </div>
@@ -120,10 +208,27 @@ export default function JudgeCaseDetails({ caseId, onBack }) {
         <>
           <div className="judge-divider" />
           <div style={{ marginBottom: 36 }}>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.3em", color: "#D4AF37", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", fontFamily: "'Josefin Sans',sans-serif" }}>
+            <p
+              style={{
+                fontSize: "0.72rem",
+                letterSpacing: "0.3em",
+                color: "#D4AF37",
+                fontWeight: 600,
+                marginBottom: 10,
+                textTransform: "uppercase",
+                fontFamily: "'Josefin Sans',sans-serif",
+              }}
+            >
               LAWYER SUBMISSIONS
             </p>
-            <h2 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.3rem,3vw,2rem)", color: "#f0ead8", fontWeight: 700 }}>
+            <h2
+              style={{
+                fontFamily: "'Cormorant Garamond',serif",
+                fontSize: "clamp(1.3rem,3vw,2rem)",
+                color: "#f0ead8",
+                fontWeight: 700,
+              }}
+            >
               Supporting Documents
             </h2>
           </div>

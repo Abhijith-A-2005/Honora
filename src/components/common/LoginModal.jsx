@@ -2,52 +2,55 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
 import { CloseIcon, ShieldIcon, GavelIcon, CourthouseIcon, ForensicIcon } from "../../assets/icons/Icons";
-import { addProfile } from "../../data/mockUsers"; // helper for signup
 
 const ROLE_ICONS = {
   "Police Department": ShieldIcon,
   "Legal Counsel": GavelIcon,
-   "Judiciary": CourthouseIcon,
+  "Judiciary": CourthouseIcon,
   "Forensic Department": ForensicIcon,
 };
 
 const ROLE_ROUTES = {
   "Police Department": "/dashboard/police",
-  "Legal Counsel": "/dashboard/lawyer", // expand later
-  "Judiciary": "/dashboard/judge",       // expand later
+  "Legal Counsel": "/dashboard/lawyer",
+  "Judiciary": "/dashboard/judge",
   "Forensic Department": "/dashboard/forensic",
 };
 
 export default function LoginModal({ role, onClose, initialSignup = false }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [extraInfo, setExtraInfo] = useState(""); // firm, court, or department
+  const [name, setName] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const [isSignup, setIsSignup] = useState(initialSignup);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  
+  const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const Icon = ROLE_ICONS[role] || ShieldIcon;
 
-  const handleOverlay = (e) => { if (e.target === e.currentTarget) onClose(); };
+  const handleOverlay = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!username.trim() || !password.trim()) {
-      setError("Both fields are required.");
+
+    // Validation
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required.");
       return;
     }
 
     if (isSignup) {
-      // additional details for sign up
-      if (!fullName.trim()) {
-        setError("Please provide your full name.");
+      if (!name.trim()) {
+        setError("Full name is required.");
         return;
       }
-      if ((role === "Police Department" || role === "Forensic Department") && !extraInfo.trim()) {
-        setError("Please provide your department name.");
+      if (!walletAddress.trim()) {
+        setError("Wallet address is required.");
         return;
       }
     }
@@ -55,31 +58,29 @@ export default function LoginModal({ role, onClose, initialSignup = false }) {
     setError("");
     setLoading(true);
 
-    const done = () => {
-      login(role, username.trim());
-      setLoading(false);
-      onClose();
-      navigate(ROLE_ROUTES[role] || "/dashboard/police");
-    };
+    try {
+      let result;
 
-    if (isSignup) {
-      // simulate async sign up
-      setTimeout(() => {
-        try {
-          const details = { name: fullName.trim() };
-          if (role === "Legal Counsel") details.firm = extraInfo.trim();
-          if (role === "Judiciary") details.court = extraInfo.trim();
-          if (role === "Police Department" || role === "Forensic Department") details.department = extraInfo.trim();
-          addProfile(role, username.trim(), details);
-        } catch (err) {
-          setError(err.message);
-          setLoading(false);
-          return;
-        }
-        done();
-      }, 1400);
-    } else {
-      setTimeout(done, 1400);
+      if (isSignup) {
+        // Signup
+        result = await signup(name.trim(), email.trim(), password.trim(), role, walletAddress.trim());
+      } else {
+        // Login
+        result = await login(email.trim(), password.trim());
+      }
+
+      if (result.success) {
+        // Success - redirect to dashboard
+        onClose();
+        navigate(ROLE_ROUTES[role] || "/dashboard/police");
+      } else {
+        // Error from auth hook
+        setError(result.error || "Authentication failed");
+      }
+    } catch (err) {
+      setError(err.message || "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,100 +91,122 @@ export default function LoginModal({ role, onClose, initialSignup = false }) {
           <CloseIcon />
         </button>
 
-        <div className="modal-icon"><Icon /></div>
+        <div className="modal-icon">
+          <Icon />
+        </div>
         <h2 className="modal-title">{role}</h2>
         <p className="modal-subtitle">Secure Authentication Required</p>
 
         <form className="modal-form" onSubmit={handleSubmit}>
+          {/* Email Field */}
           <div className="input-group">
-            <label>{isSignup ? "Choose Credentials ID" : "Credentials ID"}</label>
+            <label>{isSignup ? "Email Address" : "Email"}</label>
             <input
-              type="text"
-              placeholder="Enter your credentials ID"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               autoComplete="off"
+              required
             />
           </div>
 
+          {/* Name Field (Signup Only) */}
           {isSignup && (
-            <>
-              <div className="input-group">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  placeholder="Your full legal name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
-              {(role === "Legal Counsel" || role === "Judiciary" || role === "Police Department" || role === "Forensic Department") && (
-                <div className="input-group">
-                  <label>
-                    {role === "Legal Counsel"
-                      ? "Firm"
-                      : role === "Judiciary"
-                      ? "Court"
-                      : "Department"}
-                  </label>
-                  <input
-                    type="text"
-                    placeholder={
-                      role === "Legal Counsel"
-                        ? "Name of your firm"
-                        : role === "Judiciary"
-                        ? "Name of your court"
-                        : "Name of your department"
-                    }
-                    value={extraInfo}
-                    onChange={(e) => setExtraInfo(e.target.value)}
-                  />
-                </div>
-              )}
-            </>
+            <div className="input-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Your full legal name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
           )}
 
+          {/* Wallet Address Field (Signup Only) */}
+          {isSignup && (
+            <div className="input-group">
+              <label>Wallet Address</label>
+              <input
+                type="text"
+                placeholder="Your wallet address (e.g., 0x...)"
+                value={walletAddress}
+                onChange={(e) => setWalletAddress(e.target.value)}
+                required
+              />
+            </div>
+          )}
+
+          {/* Password Field */}
           <div className="input-group">
-            <label>{isSignup ? "Create Passphrase" : "Passphrase"}</label>
+            <label>{isSignup ? "Create Password" : "Password"}</label>
             <input
               type="password"
-              placeholder={isSignup ? "Choose a passphrase" : "Enter your passphrase"}
+              placeholder={isSignup ? "Choose a secure password" : "Enter your password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
+          {/* Error Message */}
           {error && <p className="modal-error">{error}</p>}
-          <button type="submit" className={`btn-gold modal-btn${loading ? " loading" : ""}`}>
+
+          {/* Submit Button */}
+          <button 
+            type="submit" 
+            className={`btn-gold modal-btn${loading ? " loading" : ""}`}
+            disabled={loading}
+          >
             {loading ? (
               <span className="loader" />
             ) : (
               <>
-                <span className="btn-text">{isSignup ? "Sign Up" : "Authenticate"}</span>
+                <span className="btn-text">{isSignup ? "Create Account" : "Login"}</span>
                 <span className="btn-arrow">→</span>
               </>
             )}
           </button>
         </form>
+
+        {/* Switch Between Login/Signup */}
         <p className="modal-switch">
           {isSignup ? (
             <span>
-              Already have an account?{' '}
-              <button type="button" className="link-button" onClick={() => setIsSignup(false)}>
+              Already have an account?{" "}
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => {
+                  setIsSignup(false);
+                  setError("");
+                }}
+              >
                 Log in
               </button>
             </span>
           ) : (
             <span>
-              Don't have an account?{' '}
-              <button type="button" className="link-button" onClick={() => setIsSignup(true)}>
+              Don't have an account?{" "}
+              <button
+                type="button"
+                className="link-button"
+                onClick={() => {
+                  setIsSignup(true);
+                  setError("");
+                }}
+              >
                 Sign up
               </button>
             </span>
           )}
         </p>
 
-        <p className="modal-notice">🔒 256-bit encrypted · Session logged · Tamper-proof audit trail</p>
+        <p className="modal-notice">
+          🔒 256-bit encrypted · Session logged · Tamper-proof audit trail
+        </p>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 // Router wrapper — bridges React Router with ForensicCaseDetails.
 
 import { useNavigate, useParams } from "react-router-dom";
-import ForensicCaseDetails from "./ForensicCaseDetails";
+import ForensicCaseDetails from "./ForensicCaseDetails.jsx";
 
 export default function ForensicCaseDetailsPage() {
   const { id } = useParams();
